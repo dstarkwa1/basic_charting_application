@@ -18,7 +18,7 @@ import {
   ChartTooltipContent,
 
 } from "@/components/ui/chart"
-import { ReturnData, testing_api } from "@/actions/basic-data-grab"
+import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
 
 const chartConfig = {
   'open': {
@@ -31,7 +31,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export const BasicLineChart: React.FC<{chartData: ReturnData[]}> = ({chartData}) => {
+export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[]}> = ({chartData}) => {
   return (
     <Card className="flex flex-col">
       <CardHeader>
