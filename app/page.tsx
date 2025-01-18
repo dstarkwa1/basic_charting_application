@@ -32,7 +32,7 @@ const Home:React.FC = async () => {
 
   return (
       <main className="flex grow">
-        <div className="flex flex-col grow pt-8 pr-8 min-w-full ">
+        <div className="flex flex-col grow min-w-full gap-4">
           <BasicLineChart chartData={ibmIntraday60MinData}/>
           <BasicLineChart chartData={ibmDailyData}/>
           <BasicLineChart chartData={tscoLonDailyData}/>
