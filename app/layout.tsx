@@ -4,6 +4,8 @@ import "./globals.css";
 import { Sidebar, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import React from "react";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,11 +30,25 @@ return (
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+      >
       <SidebarProvider>
         <AppSidebar/>
-        <SidebarTrigger/>
-          {children}
+        <div className="flex flex-col w-full">
+          <div className="flex flex-row justify-between p-2">
+            <SidebarTrigger/>
+            <ModeToggle/>
+          </div>
+          <div className="p-8">
+            {children}
+          </div>
+        </div>
       </SidebarProvider>
+      </ThemeProvider>
       </body>
     </html>
   );

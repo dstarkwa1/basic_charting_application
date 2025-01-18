@@ -19,6 +19,7 @@ import {
 
 } from "@/components/ui/chart"
 import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
+import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
 
 const chartConfig = {
   'open': {
@@ -38,7 +39,7 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
         <CardTitle>Basic Line Chart - Opening</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col">
-        <ChartContainer config={chartConfig} className="max-h-[500px]">
+        <ChartContainer config={chartConfig} className="max-h-[300px]">
           <LineChart
             accessibilityLayer
             data={chartData}
