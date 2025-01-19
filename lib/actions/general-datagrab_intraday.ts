@@ -47,9 +47,9 @@ export type IntradayDataGrabParams = {
 
 export const StockDataGrabIntraday = async (params: IntradayDataGrabParams) => {
 
-    // let apiKey = process.env.ALPHA_VANTAGE_API_KEY
+    let apiKey = process.env.ALPHA_VANTAGE_API_KEY
 
-    let apiKey = 'demo'
+    // let apiKey = 'demo'
 
     
     var url = `https://www.alphavantage.co/query?function=${params.function}&symbol=${params.symbol}&interval=${params.interval}&apikey=${apiKey}`;

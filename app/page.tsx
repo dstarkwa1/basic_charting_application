@@ -1,23 +1,26 @@
 import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
 import { BasicLineChart } from "@/components/ui/basic-line-chart";
-import { NextPage } from "next";
-import Image from "next/image";
 import { StockDataGrabDaily } from "@/lib/actions/general-datagrab_daily";
+import { ChartTickerFilter } from "@/components/ui/chart-ticker-filter";
 
-const Home:React.FC = async () => {
+const Home:React.FC = async ({params, searchParams}) => {
 
+  const urlParams = await searchParams
+
+  console.log(urlParams)
+  
   let ibmIntraday60MinData = await StockDataGrabIntraday(
     {
       function: 'TIME_SERIES_INTRADAY',
       interval: '5min',
-      symbol: 'IBM',
+      symbol: urlParams.ticker || 'IBM',
     }
   )
 
   let ibmDailyData = await StockDataGrabDaily(
     {
       function: 'TIME_SERIES_DAILY',
-      symbol: 'IBM',
+      symbol: urlParams.ticker || 'IBM',
     }
   )
 
@@ -25,7 +28,7 @@ const Home:React.FC = async () => {
     {
       function: 'TIME_SERIES_DAILY',
       symbol: 'IBM',
-      outputsize: 'full'
+      outputsize: urlParams.ticker || 'full'
     }
   )
 
@@ -33,9 +36,10 @@ const Home:React.FC = async () => {
   return (
       <main className="flex grow">
         <div className="flex flex-col grow min-w-full gap-4">
+          <ChartTickerFilter></ChartTickerFilter>
           <BasicLineChart chartData={ibmIntraday60MinData}/>
           <BasicLineChart chartData={ibmDailyData}/>
-          <BasicLineChart chartData={tscoLonDailyData}/>
+          {/* <BasicLineChart chartData={tscoLonDailyData}/> */}
         </div>
       </main>
   );
