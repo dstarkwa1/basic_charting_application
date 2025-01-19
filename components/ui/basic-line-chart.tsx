@@ -18,8 +18,11 @@ import {
   ChartTooltipContent,
 
 } from "@/components/ui/chart"
+
+import { ChartTickerFilter } from "./chart-ticker-filter"
 import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
 import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
+import { useTickerStore } from "@/stores/ticker-filter"
 
 const chartConfig = {
   'open': {
@@ -33,6 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[]}> = ({chartData}) => {
+  
   return (
     <Card className="flex flex-col">
       <CardHeader>
@@ -61,6 +65,7 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
               content={<ChartTooltipContent />}
             />
             <Line
+              isAnimationActive={false}
               dataKey="open"
               type="natural"
               stroke="var(--color-open)"
