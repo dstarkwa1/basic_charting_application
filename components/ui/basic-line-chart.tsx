@@ -36,7 +36,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[]}> = ({chartData}) => {
-  
+
   return (
     <Card className="flex flex-col">
       <CardHeader>
