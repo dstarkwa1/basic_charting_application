@@ -43,21 +43,23 @@ export type DailyDataGrabParams = {
 
 export const StockDataGrabDaily = async (params: DailyDataGrabParams) => {
 
-    let apiKey = process.env.ALPHA_VANTAGE_API_KEY
+    // let apiKey = process.env.ALPHA_VANTAGE_API_KEY
 
-    // let apiKey = 'demo'
+    let apiKey = 'demo'
+
+    console.log(params)
 
     let paramsOuputSize = params.outputsize ? `&outputsize=${params.outputsize}` : ``
     
     var url = `https://www.alphavantage.co/query?function=${params.function}&symbol=${params.symbol}` + paramsOuputSize + `&apikey=${apiKey}`;
-
-    console.log(url)
     
     const response = await fetch(url);
     let data = await response.json() as BaseData;
 
-    console.log(data)
     let returnData = [] as ReturnDataDaily[]
+    if(Object.keys(data).length === 1){
+        return []
+    }
 
     Object.keys(data['Time Series (Daily)']).forEach((key) => {
 

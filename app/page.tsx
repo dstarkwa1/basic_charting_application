@@ -2,8 +2,13 @@ import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
 import { BasicLineChart } from "@/components/ui/basic-line-chart";
 import { StockDataGrabDaily } from "@/lib/actions/general-datagrab_daily";
 import { ChartTickerFilter } from "@/components/ui/chart-ticker-filter";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
-const Home:React.FC = async ({params, searchParams}) => {
+interface GetDataRequest {
+  ticker: string;
+}
+
+const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({params, searchParams}) => {
 
   const urlParams = await searchParams
 
@@ -24,13 +29,13 @@ const Home:React.FC = async ({params, searchParams}) => {
     }
   )
 
-  let tscoLonDailyData = await StockDataGrabDaily(
-    {
-      function: 'TIME_SERIES_DAILY',
-      symbol: 'IBM',
-      outputsize: urlParams.ticker || 'full'
-    }
-  )
+  // let tscoLonDailyData = await StockDataGrabDaily(
+  //   {
+  //     function: 'TIME_SERIES_DAILY',
+  //     symbol: 'IBM',
+  //     outputsize: urlParams.ticker || 'full'
+  //   }
+  // )
 
 
   return (
