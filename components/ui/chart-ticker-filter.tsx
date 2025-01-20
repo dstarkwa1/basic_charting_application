@@ -63,7 +63,7 @@ export const ChartTickerFilter:React.FC = () => {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
-                    const params = new URLSearchParams(searchParams.toString())
+                    let params = new URLSearchParams(searchParams.toString())
                     params.set('ticker',currentValue)
                     let paramsString = params.toString()
 

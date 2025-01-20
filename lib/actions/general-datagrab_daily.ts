@@ -47,7 +47,7 @@ export const StockDataGrabDaily = async (params: DailyDataGrabParams) => {
 
     let apiKey = 'demo'
 
-    console.log(params)
+    // console.log(params)
 
     let paramsOuputSize = params.outputsize ? `&outputsize=${params.outputsize}` : ``
     
