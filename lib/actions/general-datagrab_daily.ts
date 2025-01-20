@@ -43,6 +43,7 @@ export type DailyDataGrabParams = {
 
 export const StockDataGrabDaily = async (params: DailyDataGrabParams) => {
 
+    console.log('im grabbing data!')
     // let apiKey = process.env.ALPHA_VANTAGE_API_KEY
 
     let apiKey = 'demo'

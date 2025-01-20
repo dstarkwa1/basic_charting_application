@@ -20,10 +20,13 @@ import {
 } from "@/components/ui/popover"
 import { useTickerStore } from "@/stores/ticker-filter"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { BasicChart } from "@/stores/chart-list"
 
-export const ChartTickerFilter:React.FC = () => {
+export const ChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = ({chartId, selectedVal}) => {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [value, setValue] = React.useState(selectedVal || '')
+  
+  let tickerFilterStore = useTickerStore()
 
   const {addToTickers, removeFromTickers, listOfTickers} = useTickerStore()
 
@@ -64,10 +67,25 @@ export const ChartTickerFilter:React.FC = () => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
                     let params = new URLSearchParams(searchParams.toString())
-                    params.set('ticker',currentValue)
-                    let paramsString = params.toString()
 
-                    router.push(pathName+'?'+ paramsString)
+                    if(chartId === undefined || chartId === null){
+                      tickerFilterStore.updateCurrentTicker(currentValue)
+                    } else {
+                      let charts: BasicChart[] = JSON.parse(params.get('charts')|| '')
+                      
+                      let idx = charts.findIndex((entry: BasicChart) => entry.id === chartId)
+
+                      charts[idx].symbol = currentValue
+
+                      console.log(JSON.stringify(charts))
+
+                      params.set('charts', JSON.stringify([...charts]))
+
+                      let paramsString = params.toString()
+                      
+                      router.push(pathName+'?'+ paramsString)
+                      
+                    }
                   }}
                 >
                   {ticker}

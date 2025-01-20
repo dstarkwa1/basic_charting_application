@@ -22,7 +22,6 @@ import {
 import { ChartTickerFilter } from "./chart-ticker-filter"
 import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
 import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
-import { useTickerStore } from "@/stores/ticker-filter"
 
 const chartConfig = {
   'open': {
@@ -35,7 +34,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[]}> = ({chartData}) => {
+export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[], id: number, selectedVal: string}> = ({chartData, id, selectedVal}) => {
 
   return (
     <Card className="flex flex-col">
@@ -43,6 +42,7 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
         <CardTitle>Basic Line Chart - Opening</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col">
+        <ChartTickerFilter chartId={id} selectedVal={selectedVal}/>
         <ChartContainer config={chartConfig} className="max-h-[300px]">
           <LineChart
             accessibilityLayer
