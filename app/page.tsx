@@ -26,21 +26,24 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
       function: 'TIME_SERIES_DAILY',
       symbol: entry.symbol
     })
-    dataList.push(data)
+    let pushValue = {
+      data: data,
+      symbol: entry.symbol,
+      id: entry.id,
+    }
+    dataList.push(pushValue)
   }
-
-  console.log(dataList.length)
 
   return (
       <main className="flex grow">
         <div className="flex flex-col grow min-w-full gap-4">
-            <div className="flex grow justify-between">
+            <div className="flex grow gap-4 justify-start">
               <ChartTickerFilter/>
-              <ChartAddButton/>
+              <ChartAddButton variant={"outline"}>Add Chart to Page</ChartAddButton>
             </div>
           {dataList.map((entry) => {
             return(
-              <BasicLineChart chartData={entry}/>
+              <BasicLineChart chartData={entry.data} id={entry.id} key={entry.id} selectedVal={entry.symbol}/>
             )
           })}
         </div>

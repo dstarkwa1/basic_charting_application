@@ -7,6 +7,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 import { useChartStore } from "@/stores/chart-list"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useTickerStore } from "@/stores/ticker-filter"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -49,11 +50,13 @@ const ChartAddButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
 
     
+    
     const searchParams = useSearchParams()
+    let tickerFilterStore = useTickerStore()
     let chartStore = useChartStore()
     let router = useRouter()
     let pathName = usePathname()
-    let ticker = searchParams.get('ticker')
+    let ticker = tickerFilterStore.currentTicker
     
     return (
       <Comp
@@ -68,7 +71,6 @@ const ChartAddButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     }, chartStore.listOfCharts)
                     
                     let params = new URLSearchParams(searchParams.toString())
-                    params.set('ticker',ticker || '')
 
                     params.set('charts', JSON.stringify(listOfCharts))
 
