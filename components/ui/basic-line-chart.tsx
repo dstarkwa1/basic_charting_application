@@ -22,6 +22,7 @@ import {
 import { ChartTickerFilter } from "./chart-ticker-filter"
 import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
 import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
+import { ChartRemoveButton } from "./chart-remove-button"
 
 const chartConfig = {
   'open': {
@@ -38,8 +39,9 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
 
   return (
     <Card className="flex flex-col">
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between items-center">
         <CardTitle>Basic Line Chart - Opening</CardTitle>
+        <ChartRemoveButton chartId={id}>Delete Chart</ChartRemoveButton>
       </CardHeader>
       <CardContent className="flex flex-col">
         <ChartTickerFilter chartId={id} selectedVal={selectedVal}/>
