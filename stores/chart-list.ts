@@ -16,6 +16,7 @@ interface ChartListState {
     numberOfCharts: number,
     addToCharts: (newChartEntry: BasicChart, oldListOfCharts: BasicChart[]) => BasicChart[];
     removeFromCharts: (basicChart: BasicChart) => void;
+    updateCharts: (basicCharts: BasicChart[]) => void;
 }
 
 export const useChartStore = create<ChartListState>((set) => ({
@@ -26,6 +27,7 @@ export const useChartStore = create<ChartListState>((set) => ({
             listOfCharts: [...state.listOfCharts, newChartEntry],
             numberOfCharts: state.numberOfCharts + 1,
         }));
+        console.log(oldListOfCharts)
         oldListOfCharts.push(newChartEntry)
         return oldListOfCharts
                 
@@ -36,6 +38,12 @@ export const useChartStore = create<ChartListState>((set) => ({
                 chartEntry.id === basicChart.id
             }), basicChart]
         }))
+    },
+    updateCharts: (basicCharts: BasicChart[]) => {
+        set((state) => ({
+            listOfCharts: basicCharts
+        })
+        )
     }
 
 }))
