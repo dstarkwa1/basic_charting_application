@@ -7,7 +7,7 @@ interface TickerState {
     currentTicker: string;
     addToTickers: (tickerString: string) => void;
     removeFromTickers: (tickerString: string) => void;
-    updateCurrentTicker: (tickerString: string) => void;
+    updateNewChartTicker: (tickerString: string) => void;
 }
 
 export const useTickerStore = create<TickerState>((set) => ({
@@ -24,9 +24,10 @@ export const useTickerStore = create<TickerState>((set) => ({
             listOfTickers: state.listOfTickers.filter((tickerEntry) => tickerEntry !== tickerString )
         }))
     },
-    updateCurrentTicker: (tickerString: string) => {
+    updateNewChartTicker: (tickerString: string) => {
         set(() => ({
             currentTicker: tickerString
         }))
     }
+    
 }))

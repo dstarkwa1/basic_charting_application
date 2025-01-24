@@ -20,15 +20,15 @@ import {
 } from "@/components/ui/popover"
 import { useTickerStore } from "@/stores/ticker-filter"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { BasicChart, useChartStore } from "@/stores/chart-list"
+import { BasicChart } from "@/stores/chart-list"
 
-export const ChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = ({chartId, selectedVal}) => {
+export const NewChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = ({chartId, selectedVal}) => {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState(selectedVal || '')
+  
+  let tickerFilterStore = useTickerStore()
 
-  const {addToTickers, removeFromTickers, listOfTickers, } = useTickerStore()
-
-  const chartList = useChartStore()
+  const {addToTickers, removeFromTickers, listOfTickers} = useTickerStore()
 
   let router = useRouter()
   const pathName = usePathname()
@@ -66,24 +66,7 @@ export const ChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
-                    let params = new URLSearchParams(searchParams.toString())
-
-                   
-                    let charts: BasicChart[] = JSON.parse(params.get('charts')|| '')
-                    
-                    let idx = charts.findIndex((entry: BasicChart) => entry.id === chartId)
-
-                    charts[idx].symbol = currentValue
-
-                    console.log(JSON.stringify(charts))
-
-                    params.set('charts', JSON.stringify([...charts]))
-                    chartList.updateCharts(charts)
-
-                    let paramsString = params.toString()
-                    
-                    router.push(pathName+'?'+ paramsString)
-                      
+                      tickerFilterStore.updateNewChartTicker(currentValue)        
                   }}
                 >
                   {ticker}
