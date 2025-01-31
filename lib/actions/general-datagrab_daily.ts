@@ -22,11 +22,11 @@ type BaseDataEntry = {
 }
 
 type BaseReturnData = {
-    open: Number,
-    high: Number,
-    low: Number,
-    close: Number,
-    volume: Number,
+    open: number,
+    high: number,
+    low: number,
+    close: number,
+    volume: number,
 }
 
 export type ReturnDataDaily = {

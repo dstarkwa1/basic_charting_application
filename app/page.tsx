@@ -6,6 +6,7 @@ import { ReadonlyURLSearchParams } from "next/navigation";
 import { ChartAddButton } from "@/components/ui/chart-add-button";
 import { BasicChart } from "@/stores/chart-list";
 import { NewChartTickerFilter } from "@/components/ui/new-chart-ticker-filter";
+import { BasicCandleChart } from "@/components/ui/basic-candle-chart";
 
 type GetDataRequest = {
   ticker: string,
@@ -47,7 +48,7 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
             </div>
           {dataList.map((entry) => {
             return(
-              <BasicLineChart chartData={entry.data} id={entry.id} key={entry.id} selectedVal={entry.symbol}/>
+              <BasicCandleChart chartData={entry.data} id={entry.id} key={entry.id} selectedVal={entry.symbol}/>
             )
           })}
         </div>

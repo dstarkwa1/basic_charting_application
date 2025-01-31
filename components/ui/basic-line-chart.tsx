@@ -40,7 +40,7 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
   return (
     <Card className="flex flex-col">
       <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle>Basic Line Chart - Opening</CardTitle>
+        <CardTitle>Basic Line Chart</CardTitle>
         <ChartRemoveButton chartId={id}>Delete Chart</ChartRemoveButton>
       </CardHeader>
       <CardContent className="flex flex-col">
@@ -71,6 +71,13 @@ export const BasicLineChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnD
               dataKey="open"
               type="natural"
               stroke="var(--color-open)"
+              dot={false}
+            />
+            <Line
+              isAnimationActive={false}
+              dataKey="close"
+              type="natural"
+              stroke="var(--color-close)"
               dot={false}
             />
           </LineChart>
