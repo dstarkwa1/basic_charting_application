@@ -2,15 +2,11 @@
 
 //Chart taken from https://codesandbox.io/p/sandbox/recharts-candlesticks-8m6n8?file=%2Fsrc%2FChart.jsx
 
-
-import { GitCommitVertical, TrendingUp } from "lucide-react"
-import { Bar, BarChart, BarProps, CartesianGrid, Cell, Line, LineChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -19,14 +15,13 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+} from "@/components/ui/basic-candle-chart/candle-chart-objects"
 
-} from "@/components/ui/chart"
-
-import { ChartTickerFilter } from "./chart-ticker-filter"
+import { ChartTickerFilter } from "../chart-ticker-filter"
 import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
 import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
-import { ChartRemoveButton } from "./chart-remove-button"
-import { ActiveShape } from "recharts/types/util/types"
+import { ChartRemoveButton } from "../chart-remove-button"
+import { useState } from "react"
 
 type CandleStickProps = {
   fill: string,
@@ -41,7 +36,6 @@ type CandleStickProps = {
 
 const Candlestick = (props: CandleStickProps) => {
   const {
-    fill,
     x,
     y,
     width,
@@ -53,7 +47,6 @@ const Candlestick = (props: CandleStickProps) => {
   const isGrowing = open < close;
   const color = isGrowing ? 'green' : 'red';
   const ratio = Math.abs(height / (open - close));
-  console.log(props);
   return (
     <g stroke={color} fill="none" strokeWidth="2">
       <path
@@ -101,18 +94,31 @@ const Candlestick = (props: CandleStickProps) => {
   );
 };
 
-const prepareData = (data: ReturnDataIntraday[] | ReturnDataDaily[])  => {
-  return data.map(({ open, close, ...other }) => {
+const prepareData = (data: ReturnDataIntraday[], date: string)  => {
+
+  data = data.filter((entry) => {
+    return(
+      entry.date.slice(0,10) === date.slice(0,10)
+    )
+  })
+
+  return (data.map(({ open, close, ...other }) => {
+    const isGrowing = open < close;
+    const color = isGrowing ? 'green' : 'red';
     return {
       ...other,
       openClose: [open, close],
+      color: color,
     };
-  });
+  }));
 };
 
-export const BasicCandleChart: React.FC<{chartData: ReturnDataIntraday[] | ReturnDataDaily[], id: number, selectedVal: string}> = ({chartData, id, selectedVal}) => {
+export const IntraDayCandleChart: React.FC<{chartData: ReturnDataIntraday[], date: string}> = ({chartData, date}) => {
 
-  const data = prepareData(chartData);
+  let [isOpen, useOpen] = useState(false)
+  let [dateValue, setDateValue] = useState("")
+ 
+  const data = prepareData(chartData, date);
   const minValue = data.reduce(
     (minValue: number | null, { low, openClose: [open, close] }) => {
       const currentMin = Math.min(low, open, close);
@@ -128,56 +134,38 @@ export const BasicCandleChart: React.FC<{chartData: ReturnDataIntraday[] | Retur
     minValue,
   );
 
-  const colors = [
-    '#1f77b4',
-    '#ff7f0e',
-    '#2ca02c',
-    '#d62728',
-    '#9467bd',
-    '#8c564b',
-    '#e377c2',
-    '#7f7f7f',
-    '#bcbd22',
-    '#17becf',
-  ];
-
-  const chartConfig = {
-    'open': {
-      label: "open",
-      color: "hsl(var(--chart-1))",
-    },
-    'close': {
-      label: "close",
-      color: "hsl(var(--chart-2))",
-    },
-  } satisfies ChartConfig
+  const chartConfig = {} satisfies ChartConfig
 
   
   return (
+    <div>
     <Card className="flex flex-col">
       <CardHeader className="flex flex-row justify-between items-center">
-        <CardTitle>Basic Line Chart</CardTitle>
-        <ChartRemoveButton chartId={id}>Delete Chart</ChartRemoveButton>
+        <CardTitle>Basic Candlestick Chart</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col">
-        <ChartTickerFilter chartId={id} selectedVal={selectedVal}/>
         <ChartContainer config={chartConfig} className="max-h-[300px]">
         <BarChart
-      width={600}
-      height={300}
-      data={data}
-      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          onClick={(payload) => {
+            useOpen(true)
+            setDateValue(payload?.activePayload![0].payload.date)
+          }}
+          width={600}
+          height={300}
+          data={data}
+          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
     >
       <XAxis dataKey="date" />
       <YAxis domain={[minValue!, maxValue!]} />
       <CartesianGrid strokeDasharray="3 3" />
       <Bar
+        isAnimationActive={false}
         dataKey="openClose"
         fill="#8884d8"
         shape={ 
           (props: any) => {
             return(
-            <Candlestick 
+            <Candlestick
               fill={props.fill}
               height={props.height}
               high={props.high}
@@ -190,15 +178,13 @@ export const BasicCandleChart: React.FC<{chartData: ReturnDataIntraday[] | Retur
             />)
           }
         }
-        // label={{ position: 'top' }}
       >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={colors[index % 20]} />
-        ))}
       </Bar>
+      <ChartTooltip content={<ChartTooltipContent/>}/>
     </BarChart>
         </ChartContainer>
       </CardContent>
     </Card>
+    </div>
   )
 }
