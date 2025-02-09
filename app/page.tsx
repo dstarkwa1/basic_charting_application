@@ -1,11 +1,9 @@
-import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
-import { BasicLineChart } from "@/components/ui/basic-line-chart";
 import { StockDataGrabDaily } from "@/lib/actions/general-datagrab_daily";
-import { ChartTickerFilter } from "@/components/ui/chart-ticker-filter";
-import { ReadonlyURLSearchParams } from "next/navigation";
 import { ChartAddButton } from "@/components/ui/chart-add-button";
 import { BasicChart } from "@/stores/chart-list";
 import { NewChartTickerFilter } from "@/components/ui/new-chart-ticker-filter";
+import { BasicCandleChart } from "@/components/ui/basic-candle-chart/basic-candle-chart";
+import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
 
 type GetDataRequest = {
   ticker: string,
@@ -18,17 +16,21 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
 
   let listOfCharts = urlParams.charts? JSON.parse(urlParams.charts) as BasicChart[] : []
 
-  console.log(listOfCharts)
-
   let dataList = [] 
 
   for (const entry of listOfCharts) {
-    let data = await StockDataGrabDaily({
+    let dailyData = await StockDataGrabDaily({
       function: 'TIME_SERIES_DAILY',
       symbol: entry.symbol
     })
+    let intraDayData = await StockDataGrabIntraday({
+      function: 'TIME_SERIES_INTRADAY',
+      symbol: entry.symbol,
+      interval: '5min'
+    })
     let pushValue = {
-      data: data,
+      dailyData: dailyData,
+      intraDayData: intraDayData,
       symbol: entry.symbol,
       id: entry.id,
     }
@@ -47,7 +49,7 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
             </div>
           {dataList.map((entry) => {
             return(
-              <BasicLineChart chartData={entry.data} id={entry.id} key={entry.id} selectedVal={entry.symbol}/>
+              <BasicCandleChart chartData={entry.dailyData} drillData={entry.intraDayData} id={entry.id} key={entry.id} selectedVal={entry.symbol}/>
             )
           })}
         </div>

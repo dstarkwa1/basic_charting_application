@@ -22,11 +22,11 @@ type BaseDataEntry = {
 }
 
 type BaseReturnData = {
-    open: Number,
-    high: Number,
-    low: Number,
-    close: Number,
-    volume: Number,
+    open: number,
+    high: number,
+    low: number,
+    close: number,
+    volume: number,
 }
 
 export type ReturnDataIntraday = {
@@ -52,7 +52,7 @@ export const StockDataGrabIntraday = async (params: IntradayDataGrabParams) => {
     let apiKey = 'demo'
 
     
-    var url = `https://www.alphavantage.co/query?function=${params.function}&symbol=${params.symbol}&interval=${params.interval}&apikey=${apiKey}`;
+    var url = `https://www.alphavantage.co/query?function=${params.function}&symbol=${params.symbol}&interval=${params.interval}&outputsize=full&apikey=${apiKey}`;
     
     const response = await fetch(url);
     let data = await response.json() as BaseData;

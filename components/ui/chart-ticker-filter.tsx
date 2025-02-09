@@ -75,8 +75,6 @@ export const ChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}
 
                     charts[idx].symbol = currentValue
 
-                    console.log(JSON.stringify(charts))
-
                     params.set('charts', JSON.stringify([...charts]))
                     chartList.updateCharts(charts)
 
