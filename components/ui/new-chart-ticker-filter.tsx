@@ -108,7 +108,8 @@ const NewChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = 
                       addToTickers(currentValue)       
                   }}
                 >
-                  {ticker}
+                  <span>{ticker}</span>
+                  <span>Added</span>
                   <Check
                     className={cn(
                       "ml-auto",
