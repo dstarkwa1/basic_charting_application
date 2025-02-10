@@ -1,9 +1,10 @@
 import { StockDataGrabDaily } from "@/lib/actions/general-datagrab_daily";
 import { ChartAddButton } from "@/components/ui/chart-add-button";
 import { BasicChart } from "@/stores/chart-list";
-import { NewChartTickerFilter } from "@/components/ui/new-chart-ticker-filter";
+import { NewChartTickerWrapped } from "@/components/ui/new-chart-ticker-filter";
 import { BasicCandleChart } from "@/components/ui/basic-candle-chart/basic-candle-chart";
 import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
+import { useTickerStore } from "@/stores/ticker-filter";
 
 type GetDataRequest = {
   ticker: string,
@@ -11,7 +12,7 @@ type GetDataRequest = {
 }
 
 const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({params, searchParams}) => {
-
+  
   const urlParams = await searchParams
 
   let listOfCharts = urlParams.charts? JSON.parse(urlParams.charts) as BasicChart[] : []
@@ -43,7 +44,7 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
             <div className="flex grow gap-4 justify-start items-end">
               <div className="flex flex-col items-center gap-2">
               <span> Select your new chart's ticker </span>
-                <NewChartTickerFilter/>
+                <NewChartTickerWrapped/>
               </div>
               <ChartAddButton variant={"outline"}>Add Chart to Page</ChartAddButton>
             </div>
