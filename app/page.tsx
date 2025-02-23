@@ -1,10 +1,8 @@
-import { StockDataGrabDaily } from "@/lib/actions/general-datagrab_daily";
 import { ChartAddButton } from "@/components/ui/chart-add-button";
 import { BasicChart } from "@/stores/chart-list";
 import { NewChartTickerWrapped } from "@/components/ui/new-chart-ticker-filter";
 import { BasicCandleChart } from "@/components/ui/basic-candle-chart/basic-candle-chart";
-import { StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
-import { useTickerStore } from "@/stores/ticker-filter";
+import { TickerDataGrab } from "@/lib/actions/ticker-bar-aggregates-polygon";
 
 type GetDataRequest = {
   ticker: string,
@@ -19,16 +17,36 @@ const Home:React.FC<{params:string, searchParams:GetDataRequest}> = async ({para
 
   let dataList = [] 
 
+
+  // let a = await TickerDataGrab({
+  //   ticker:"AAPL", 
+  //   multiplier:1,
+  //   timespan:"day",
+  //   fromDate:"2024-03-01",
+  //   toDate:"2024-04-14",
+  //   })
+
+
   for (const entry of listOfCharts) {
-    let dailyData = await StockDataGrabDaily({
-      function: 'TIME_SERIES_DAILY',
-      symbol: entry.symbol
-    })
-    let intraDayData = await StockDataGrabIntraday({
-      function: 'TIME_SERIES_INTRADAY',
-      symbol: entry.symbol,
-      interval: '5min'
-    })
+    let dailyData = await TickerDataGrab({
+      ticker:entry.symbol, 
+      multiplier: 1,
+      timespan:"day",
+      fromDate:"2024-03-01",
+      toDate:"2024-04-14",
+      }
+    )
+    
+    let intraDayData = await TickerDataGrab({
+      ticker: entry.symbol, 
+      multiplier: 5,
+      timespan:"minute",
+      fromDate:"2024-03-01",
+      toDate:"2024-04-14",
+      intraDay: true,
+      }
+    )
+
     let pushValue = {
       dailyData: dailyData,
       intraDayData: intraDayData,

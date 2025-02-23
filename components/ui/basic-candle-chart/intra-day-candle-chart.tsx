@@ -18,10 +18,11 @@ import {
 } from "@/components/ui/basic-candle-chart/candle-chart-objects"
 
 import { ChartTickerFilter } from "../chart-ticker-filter"
-import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
-import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
+import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday-alphavantage"
+import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily-alphavantage"
 import { ChartRemoveButton } from "../chart-remove-button"
 import { useState } from "react"
+import { IAggs } from "@polygon.io/client-js"
 
 type CandleStickProps = {
   fill: string,
@@ -94,41 +95,45 @@ const Candlestick = (props: CandleStickProps) => {
   );
 };
 
-const prepareData = (data: ReturnDataIntraday[], date: string)  => {
+const prepareData = (data: IAggs, date: string)  => {
 
-  data = data.filter((entry) => {
+  let returnData = data.results?.filter((entry) => {
+
     return(
-      entry.date.slice(0,10) === date.slice(0,10)
+      entry?.T?.slice(0,10) === date.slice(0,10)
     )
   })
 
-  return (data.map(({ open, close, ...other }) => {
-    const isGrowing = open < close;
+  console.log(returnData)
+
+
+  return (returnData?.map(({ o, c, ...other }) => {
+    const isGrowing = o! < c!;
     const color = isGrowing ? 'green' : 'red';
     return {
       ...other,
-      openClose: [open, close],
+      openClose: [o, c],
       color: color,
     };
   }));
 };
 
-export const IntraDayCandleChart: React.FC<{chartData: ReturnDataIntraday[], date: string}> = ({chartData, date}) => {
+export const IntraDayCandleChart: React.FC<{chartData: IAggs, date: string}> = ({chartData, date}) => {
 
   let [isOpen, useOpen] = useState(false)
   let [dateValue, setDateValue] = useState("")
  
   const data = prepareData(chartData, date);
-  const minValue = data.reduce(
-    (minValue: number | null, { low, openClose: [open, close] }) => {
-      const currentMin = Math.min(low, open, close);
+  const minValue = data?.reduce(
+    (minValue: number | null, { l, openClose: [o, c] }) => {
+      const currentMin = Math.min(l!, o!, c!);
       return minValue === null || currentMin < minValue ? currentMin : minValue;
     },
     null,
   );
-  const maxValue = data.reduce(
-    (maxValue, { high, openClose: [open, close] }) => {
-      const currentMax = Math.max(high, open, close);
+  const maxValue = data?.reduce(
+    (maxValue, { h, openClose: [o, c] }) => {
+      const currentMax = Math.max(h!, o!, c!);
       return ( maxValue ? currentMax > maxValue ? currentMax : maxValue : currentMax);
     },
     minValue,
@@ -148,14 +153,14 @@ export const IntraDayCandleChart: React.FC<{chartData: ReturnDataIntraday[], dat
         <BarChart
           onClick={(payload) => {
             useOpen(true)
-            setDateValue(payload?.activePayload![0].payload.date)
+            setDateValue(payload?.activePayload![0].payload.T)
           }}
           width={600}
           height={300}
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
     >
-      <XAxis dataKey="date" />
+      <XAxis dataKey="T" tickFormatter={(date) => date.slice(11,)}/>
       <YAxis domain={[minValue!, maxValue!]} />
       <CartesianGrid strokeDasharray="3 3" />
       <Bar
@@ -168,13 +173,13 @@ export const IntraDayCandleChart: React.FC<{chartData: ReturnDataIntraday[], dat
             <Candlestick
               fill={props.fill}
               height={props.height}
-              high={props.high}
-              low={props.low}
+              high={props.h}
+              low={props.l}
               openClose={props.openClose}
               width={props.width}
               x={props.x}
               y={props.y}
-              key={props.x + props.y + props.high}
+              key={props.x + props.y + props.h}
             />)
           }
         }

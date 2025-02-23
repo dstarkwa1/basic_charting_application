@@ -18,11 +18,10 @@ import {
 } from "@/components/ui/basic-candle-chart/candle-chart-objects"
 
 import { ChartTickerFilter } from "../chart-ticker-filter"
-import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
-import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
 import { ChartRemoveButton } from "../chart-remove-button"
 import { DialogDailyCandleChart } from "./dialog-for-daily-chart"
 import { useState } from "react"
+import { IAggs } from "@polygon.io/client-js"
 
 type CandleStickProps = {
   fill: string,
@@ -95,36 +94,37 @@ const Candlestick = (props: CandleStickProps) => {
   );
 };
 
-const prepareData = (data: ReturnDataIntraday[] | ReturnDataDaily[])  => {
-  return data.map(({ open, close, ...other }) => {
-    const isGrowing = open < close;
+const prepareData = (data: IAggs)  => {
+  
+  return data?.results?.map(({ o, c, ...other }) => {
+    const isGrowing = o! < c!;
     const color = isGrowing ? 'green' : 'red';
     return {
       ...other,
-      openClose: [open, close],
+      openClose: [o, c],
       color: color,
     };
   });
 };
 
 export const BasicCandleChart: 
-  React.FC<{chartData: ReturnDataDaily[], drillData:ReturnDataIntraday[], id: number, selectedVal: string}> = 
+  React.FC<{chartData: IAggs , drillData:IAggs , id: number, selectedVal: string}> = 
   ({chartData, id, selectedVal, drillData}) => {
 
   let [isOpen, useOpen] = useState(false)
   let [dateValue, setDateValue] = useState("")
  
   const data = prepareData(chartData);
-  const minValue = data.reduce(
-    (minValue: number | null, { low, openClose: [open, close] }) => {
-      const currentMin = Math.min(low, open, close);
+  const minValue = data?.reduce(
+    (minValue: number | null, { l, openClose: [o, c] }) => {
+      const currentMin = Math.min(l!, o!, c!);
       return minValue === null || currentMin < minValue ? currentMin : minValue;
     },
     null,
   );
-  const maxValue = data.reduce(
-    (maxValue, { high, openClose: [open, close] }) => {
-      const currentMax = Math.max(high, open, close);
+  const maxValue = data?.reduce(
+    (maxValue, { h, openClose: [o, c] }) => {
+      const currentMax = Math.max(h!, o!, c!);
       return ( maxValue ? currentMax > maxValue ? currentMax : maxValue : currentMax);
     },
     minValue,
@@ -147,14 +147,14 @@ export const BasicCandleChart:
         <BarChart
           onClick={(payload) => {
             useOpen(true)
-            setDateValue(payload?.activePayload![0].payload.date)
+            setDateValue(payload?.activePayload![0].payload.T)
           }}
           width={600}
           height={300}
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
     >
-      <XAxis dataKey="date" />
+      <XAxis dataKey="T" />
       <YAxis domain={[minValue!, maxValue!]} />
       <CartesianGrid strokeDasharray="3 3" />
       <Bar
@@ -166,13 +166,13 @@ export const BasicCandleChart:
             <Candlestick
               fill={props.fill}
               height={props.height}
-              high={props.high}
-              low={props.low}
+              high={props.h}
+              low={props.l}
               openClose={props.openClose}
               width={props.width}
               x={props.x}
               y={props.y}
-              key={props.x + props.y + props.high}
+              key={props.x + props.y + props.h}
             />)
           }
         }

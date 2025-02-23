@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/chart"
 
 import { ChartTickerFilter } from "./chart-ticker-filter"
-import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday"
-import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily"
+import { ReturnDataIntraday } from "@/lib/actions/general-datagrab_intraday-alphavantage"
+import { ReturnDataDaily } from "@/lib/actions/general-datagrab_daily-alphavantage"
 import { ChartRemoveButton } from "./chart-remove-button"
 
 const chartConfig = {
