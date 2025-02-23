@@ -235,13 +235,13 @@ const ChartTooltipContent = React.forwardRef<
                             {item?.payload.openClose[1]}
                           </span>
                           <span className="text-muted-foreground">
-                            {item?.payload.high}
+                            {item?.payload.h}
                           </span>
                           <span className="text-muted-foreground">
-                            {item?.payload.low}
+                            {item?.payload.l}
                           </span>
                           <span className="text-muted-foreground">
-                            {item?.payload.volume}
+                            {item?.payload.v}
                           </span>
                         </div>
                         

@@ -65,9 +65,6 @@ const ChartRemoveButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
             () => {
                 let listOfCharts = chartStore.removeFromCharts(chartId,chartStore.listOfCharts)
 
-                console.log('chartid')
-                console.log(chartId)
-                    
                 let params = new URLSearchParams(searchParams.toString())
 
                 params.set('charts', JSON.stringify(listOfCharts))

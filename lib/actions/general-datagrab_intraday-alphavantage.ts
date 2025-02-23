@@ -2,6 +2,7 @@
 
 import fetch from 'node-fetch';
 import { env } from 'process';
+import { TickerDataGrab } from './ticker-bar-aggregates-polygon';
 
 type FunctionLabelFromApi = {
     [index: string]: Record<string, BaseDataEntry>

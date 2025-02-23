@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react";
 import { BasicCandleChart } from "./basic-candle-chart";
 import { IntraDayCandleChart } from "./intra-day-candle-chart";
-import { ReturnDataIntraday, StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday";
+import { ReturnDataIntraday, StockDataGrabIntraday } from "@/lib/actions/general-datagrab_intraday-alphavantage";
 
 type DailyCandleChartProps = {
   date: string;

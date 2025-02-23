@@ -27,7 +27,7 @@ export const useChartStore = create<ChartListState>((set) => ({
             listOfCharts: [...state.listOfCharts, newChartEntry],
             numberOfCharts: state.numberOfCharts + 1,
         }));
-        console.log(oldListOfCharts)
+
         oldListOfCharts.push(newChartEntry)
         return oldListOfCharts
                 
@@ -40,7 +40,7 @@ export const useChartStore = create<ChartListState>((set) => ({
         }));
         let filteredCharts = oldListOfCharts.filter((chartEntry) => {return(chartEntry.id !== chartId)})
 
-        console.log(filteredCharts)
+
         return filteredCharts
     },
     updateCharts: (basicCharts: BasicChart[]) => {

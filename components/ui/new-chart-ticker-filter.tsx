@@ -62,9 +62,6 @@ const NewChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = 
 
   
 
-  console.log(data)
-  console.log(searchValue)
-  console.log(urlString)
 
   const {addToTickers, removeFromTickers, listOfTickers} = useTickerStore()
 
@@ -124,13 +121,12 @@ const NewChartTickerFilter:React.FC<{chartId?: number, selectedVal?: string}> = 
                   key={entry['1. symbol']}
                   value={entry['1. symbol']}
                   onSelect={(currentValue) => {
-                    console.log('selecedval')
-                    console.log(currentValue)
+
                     setValue(currentValue)
                     addToTickers(currentValue)
                     setOpen(false)
                       tickerFilterStore.updateNewChartTicker(currentValue)        
-                    console.log(tickerFilterStore.listOfTickers)
+
                   }}
                   >
                     <span>{entry['1. symbol']}</span>
